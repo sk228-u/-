@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <form>
+      <h1>회원가입</h1>
+      <div>email : <input type="email" id="signUPEmail" /></div>
+      <div>passward : <input type="password" id="signUPPassword" /></div>
+      <button type="submit" id="signUPButton">회원가입 하기</button>
+      <button>로그인 하러 가기</button>
+    </form>
+
+    <form>
+      <h1>로그인</h1>
+      <div>email : <input type="email" id="signINEmail" /></div>
+      <div>passward : <input type="password" id="signINPassword" /></div>
+      <button type="submit" id="signINButton">로그인 하기</button>
+      <button>회원가입 하러 가기</button>
+    </form>
+
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-app.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyBlEAichTNc1oZmOjF-61HZlXO-tDFaMHg",
+        authDomain: "jashshel-935a5.firebaseapp.com",
+        projectId: "jashshel-935a5",
+        storageBucket: "jashshel-935a5.appspot.com",
+        messagingSenderId: "613073568926",
+        appId: "1:613073568926:web:4ad82172093a2eee0da78f",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+
+      import {
+        getAuth,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+      } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-auth.js";
+
+      // 회원가입 확인
+      const auth = getAuth();
+
+      document
+        .getElementById("signUPButton")
+        .addEventListener("click", (event) => {
+          event.preventDefault();
+          const signUPEmail = document.getElementById("signUPEmail").value;
+          const signUPPassword =
+            document.getElementById("signUPPassword").value;
+
+          createUserWithEmailAndPassword(auth, signUPEmail, signUPPassword)
+            .then((userCredential) => {
+              console.log("회원가입 성공");
+              // 로그인...
+              const user = userCredential.user;
+
+              // 회원가입 완료 창을 띄우기
+              const newWindow = window.open(
+                "",
+                "가입 완료",
+                "width=1000, height=500"
+              );
+              newWindow.document.write("가입성공 --------> 로그인 하시오");
+              // 글자 크기 늘리기
+              newWindow.document.querySelector(".output").style.fontSize =
+                "100px";
+            })
+            .catch((error) => {
+              console.log("error");
+              const errorCode = error.code;
+              const errorMessage = error.message;
+            });
+        });
+
+      // 로그인 확인
+
+      document
+        .getElementById("signINButton")
+        .addEventListener("click", (event) => {
+          event.preventDefault();
+          const signINEmail = document.getElementById("signINEmail").value;
+          const signINPassword =
+            document.getElementById("signINPassword").value;
+
+          // 로그인 완료 후 이동할 URL
+          const targetUrl =
+            "https://sites.google.com/view/dongyang0113/%ED%99%88";
+
+          // 로그인 성공 시
+          signInWithEmailAndPassword(auth, signINEmail, signINPassword)
+            .then((userCredential) => {
+              // 로그인 성공
+              console.log("로그인 성공");
+              const user = userCredential.user;
+              // ...
+
+              // 이동할 사이트로 이동
+              window.location.href = targetUrl;
+            })
+
+            // 로그인 실패
+            .catch((error) => {
+              console.log("로그인에 실패했습니다.");
+              const errorCode = error.code;
+              const errorMessage = error.message;
+
+              // 로그인 실패 창을 띄우기
+              const newWindow = window.open(
+                "",
+                "출석 실패",
+                "width=1000, height=500"
+              );
+              newWindow.document.write(
+                "로그인 실패 -------->이메일이나 비밀번호를 재확인하세요"
+              );
+            });
+        });
+    </script>
+  </body>
+</html>
